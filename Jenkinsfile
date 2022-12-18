@@ -1,6 +1,6 @@
 node{
    stage('SCM Checkout'){
-     git 'https://github.com/vinoremo/my-appgit'
+     git 'https://github.com/vinoremo/my-app.git'
    }
    stage('Compile-Package'){
 
@@ -21,7 +21,7 @@ node{
    withCredentials([string(credentialsId: 'dockerPass', variable: 'dockerPassword')]) {
    sh "docker login -u vinothr448 -p ${dockerPassword}"
     }
-   sh 'docker pushvinothr448/myweb:0.0.2'
+   sh 'docker push vinothr448/myweb:0.0.2'
    }
   stage('Nexus Image Push'){
    sh "docker login -u admin -p admin123 54.171.156.244:8083"
