@@ -1,10 +1,10 @@
 node{
    stage('SCM Checkout'){
-     git 'https://github.com/damodaranj/my-app.git'
+     git 'https://github.com/vinoremo/my-appgit'
    }
    stage('Compile-Package'){
 
-      def mvnHome =  tool name: 'maven3', type: 'maven'   
+      def mvnHome =  tool name: 'maven', type: 'maven'   
       sh "${mvnHome}/bin/mvn clean package"
 	  sh 'mv target/myweb*.war target/newapp.war'
    }
@@ -15,17 +15,17 @@ node{
 	        }
 	    }
    stage('Build Docker Imager'){
-   sh 'docker build -t saidamo/myweb:0.0.2 .'
+   sh 'docker build -t vinothr448/myweb:0.0.2 .'
    }
    stage('Docker Image Push'){
    withCredentials([string(credentialsId: 'dockerPass', variable: 'dockerPassword')]) {
-   sh "docker login -u saidamo -p ${dockerPassword}"
+   sh "docker login -u vinothr448 -p ${dockerPassword}"
     }
-   sh 'docker push saidamo/myweb:0.0.2'
+   sh 'docker pushvinothr448/myweb:0.0.2'
    }
   stage('Nexus Image Push'){
    sh "docker login -u admin -p admin123 54.171.156.244:8083"
-   sh "docker tag saidamo/myweb:0.0.2 54.171.156.244:8083/damo:1.0.0"
+   sh "docker tag vinothr448/myweb:0.0.2 54.171.156.244:8083/damo:1.0.0"
    sh 'docker push 54.171.156.244:8083/damo:1.0.0'
    }
 
@@ -36,7 +36,7 @@ node{
 		//  do nothing if there is an exception
 	}
    stage('Docker deployment'){
-   sh 'docker run -d -p 8090:8080 --name tomcattest saidamo/myweb:0.0.2' 
+   sh 'docker run -d -p 8090:8080 --name tomcattest vinothr448/myweb:0.0.2' 
    }
 }
 }
